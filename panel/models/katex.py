@@ -4,6 +4,8 @@ Defines a custom KaTeX bokeh model to render text using KaTeX.
 from bokeh.models import Markup
 
 from ..config import config
+from ..io.resources import bundled_files
+from ..util import classproperty
 
 
 class KaTeX(Markup):
@@ -11,17 +13,27 @@ class KaTeX(Markup):
     A bokeh model that renders text using KaTeX.
     """
 
-    __css__ = ["https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.css"]
+    __css_raw__ = [f"{config.npm_cdn}/katex@0.6.0/dist/katex.min.css"]
 
-    __javascript__ = [
-        "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min.js",
+    __javascript_raw__ = [
+        f"{config.npm_cdn}/katex@0.6.0/dist/katex.min.js",
         f"{config.npm_cdn}/katex@0.10.1/dist/contrib/auto-render.min.js"
     ]
 
-    __js_skip__ = {
-        'katex': __javascript__[:1],
-        'renderMathInElement': __javascript__[1:]
-    }
+    @classproperty
+    def __javascript__(cls):
+        return bundled_files(cls)
+
+    @classproperty
+    def __css__(cls):
+        return bundled_files(cls, 'css')
+
+    @classproperty
+    def __js_skip__(cls):
+        return {
+            'katex': cls.__javascript__[:1],
+            'renderMathInElement': cls.__javascript__[1:]
+        }
 
     __js_require__ = {
         'paths': {
