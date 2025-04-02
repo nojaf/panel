@@ -37,7 +37,7 @@ class KaTeX(Markup):
 
     __js_require__ = {
         'paths': {
-            'katex': "https://cdnjs.cloudflare.com/ajax/libs/KaTeX/0.6.0/katex.min",
+            'katex': f"{config.npm_cdn}/katex@0.6.0/dist/katex.min",
             'autoLoad': f"{config.npm_cdn}/katex@0.10.1/dist/contrib/auto-render.min"
         },
         'exports': {'katex': 'katex', 'autoLoad': 'renderMathInElement'}
